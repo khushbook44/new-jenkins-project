@@ -1,9 +1,15 @@
 pipeline {
-    agent { docker { image 'maven:3.3.3' } }
+    agent any
+
     stages {
-        stage('build') {
+        stage('Deploy') {
+            when {
+              expression {
+                currentBuild.result == null || currentBuild.result == 'SUCCESS' (1)
+              }
+            }
             steps {
-                sh 'mvn --version'
+                sh 'make publish'
             }
         }
     }
